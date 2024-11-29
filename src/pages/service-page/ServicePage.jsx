@@ -7,7 +7,7 @@ const ServicePage = () => {
     return (
         <div>
             {Array(5).fill(0).map(id => (
-                <Card verticalSpace="xs" horizontalSpace="xs" key={id}>
+                <Card verticalSpace="xs" horizontalSpace="xs" key={id + 1}>
                     <Text>{faker.lorem.sentence()}</Text>
                     <Text>{faker.lorem.paragraph()}</Text>
                 </Card>
