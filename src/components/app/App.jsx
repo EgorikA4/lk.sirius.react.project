@@ -14,6 +14,7 @@ import { Responses404 } from '@consta/uikit/Responses404';
 import MainLayout from '../../layouts/main-layout/MainLayout';
 import { AppRoute } from '../../../const';
 import AuthPage from '../../pages/auth-page/AuthPage';
+import ProfilePage from '../../pages/profile-page/ProfilePage';
 
 
 const App = function() {
@@ -25,6 +26,7 @@ const App = function() {
             <Route index element={<MainPage />}/>
             <Route path={AppRoute.service} element={<ServicePage />}/>
             <Route path={AppRoute.auth} element={<AuthPage />}/>
+            <Route path={AppRoute.profile} element={<ProfilePage />}/>
             <Route path='/service/:id' element={<ServiceDetailPage />}/>
           </Route>
           <Route path='*' element={<Responses404 />}/>

@@ -8,7 +8,7 @@ const Header = () => {
     return (
         <Layout>
             <Menu />
-            <NavLink>
+            <NavLink to='/profile'>
                 <Button label='ФИО'></Button>
             </NavLink>
             <NavLink to='/login'>

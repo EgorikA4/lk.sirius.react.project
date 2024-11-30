@@ -1,63 +1,88 @@
 import React, { useState } from "react";
-import { Informer } from '@consta/uikit/Informer';
-
+import { Informer } from "@consta/uikit/Informer";
+import { useNavigate } from "react-router-dom";
+import { saveToken } from "../../services/token";
 
 const AuthPage = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [isError, setIsError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-    const onButtonClick = (evt) => {
-        evt.preventDefault();
+  const onFormSubmit = async (evt) => {
+    evt.preventDefault();
 
-        if ('' === email) {
-            setIsError('Please enter your email')
-            return
-        }
+    // emilys
+    // emilyspass
 
-        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-            setIsError('Please enter a valid email')
-            return
-        }
+    const fetchUserToken = async (username, password) => {
+      const loginResponse = await fetch("https://dummyjson.com/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+          expiresInMins: 60
+        })
+      });
 
-        if ('' === password) {
-            setIsError('Please enter a password')
-            return
-        }
+      if (!loginResponse.ok) {
+        throw new Error("Failed to log in");
+      }
 
-        if (password.length < 7) {
-            setIsError('The password must be 8 characters or longer')
-            return
-        }
-
-        // TODO: redirect
-        console.log('Успех!');
+      return (await loginResponse.json()).accessToken
     }
 
-    return (
-        <form onSubmit={onButtonClick}>
-            <label>Enter your email:
-                <input 
-                    value={email}
-                    onChange={(ev) => setEmail(ev.target.value)}
-                />
-            </label>
-            <br></br>
-            <label>Enter your password:
-                <input 
-                    value={password} 
-                    onChange={(ev) => setPassword(ev.target.value)}
-                />
-            </label> 
-            <br></br>
-            <br></br>
-            { 
-                isError !== '' ? <Informer status="alert" view="filled" title="Ошибка" label={isError}/> : undefined
-            }
-            <br></br>
-            <button type='submit'>Отправить</button>
-        </form> 
-    )
-}
+    try {
+      saveToken(await fetchUserToken(username, password))
+      navigate("/profile")
+    } catch (error) {
+      setError(error.message)
+      return
+    }
+  };
+
+  return (
+    <form onSubmit={onFormSubmit} style={{ maxWidth: "400px", margin: "0 auto" }}>
+      <div style={{ marginBottom: "16px" }}>
+        <label htmlFor="username" style={{ display: "block", marginBottom: "8px" }}>
+          Enter your username:
+        </label>
+        <input
+          id="username"
+          type="username"
+          value={username}
+          onChange={(ev) => setUsername(ev.target.value)}
+          style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+        />
+      </div>
+
+      <div style={{ marginBottom: "16px" }}>
+        <label htmlFor="password" style={{ display: "block", marginBottom: "8px" }}>
+          Enter your password:
+        </label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(ev) => setPassword(ev.target.value)}
+          style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+        />
+      </div>
+
+      {error && (
+        <div style={{ marginBottom: "16px" }}>
+          <Informer status="alert" view="filled" title="Error" label={error} />
+        </div>
+      )}
+
+      <button type="submit" style={{ padding: "8px 16px", cursor: "pointer" }}>
+        Submit
+      </button>
+    </form>
+  );
+};
 
 export default AuthPage;
