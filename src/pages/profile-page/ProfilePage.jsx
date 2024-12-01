@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Card } from "@consta/uikit/Card";
+import React, { useEffect } from "react";
 import { Text } from "@consta/uikit/Text";
-import { Button } from "@consta/uikit/Button";
-import { getToken, dropToken } from "../../services/token";
-import { Navigate, useNavigate } from "react-router-dom";
+import { getToken } from "../../services/token";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from "../../store/store";
+
 
 const ProfilePage = () => {
-  const [user, setUser] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.user)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const ProfilePage = () => {
         }
 
         const userInfo = await response.json();
-        setUser(userInfo);
+        dispatch(setUser(userInfo));
       } catch (err) {
         setError(err.message || "An error occurred while fetching user info");
       } finally {
@@ -44,36 +44,9 @@ const ProfilePage = () => {
     fetchUserInfo();
   }, [navigate]);
 
-  const handleLogout = () => {
-    dropToken();
-    navigate("/");
-  };
-
-  if (loading) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (error) {
     return (
-      <Card verticalSpace="xl" horizontalSpace="xl" style={{ maxWidth: "600px", margin: "0 auto" }}>
-        <Text size="xl" weight="bold" style={{ color: "red" }}>
-          {error}
-        </Text>
-        <Button label="Back to Login" onClick={() => navigate("/auth")} />
-      </Card>
-    );
-  }
-
-  return (
-    <Card verticalSpace="xl" horizontalSpace="xl" style={{ maxWidth: "600px", margin: "0 auto" }}>
-      <div style={{ textAlign: "center" }}>
-        {user?.image && (
-          <img
-            src={user.image}
-            alt="User Profile"
-            style={{ width: "150px", height: "150px", borderRadius: "50%", marginBottom: "16px" }}
-          />
-        )}
+    <div style={{ display: "flex", justifyContent: "space-between", width: "60vw" }}>
+      <div>
         <Text size="xl" weight="bold">
           {user?.firstName} {user?.lastName}
         </Text>
@@ -83,13 +56,13 @@ const ProfilePage = () => {
         </Text>
         <Text view="secondary">Phone: {user?.phone}</Text>
         <Text view="secondary">Age: {user?.age}</Text>
-        <Button
-          label="Logout"
-          onClick={handleLogout}
-          style={{ marginTop: "16px", cursor: "pointer" }}
-        />
       </div>
-    </Card>
+      <img
+        src={user?.image}
+        alt="User Profile"
+        style={{ width: "150px", height: "150px", borderRadius: "50%", marginBottom: "16px" }}
+      />
+    </div>
   );
 };
 

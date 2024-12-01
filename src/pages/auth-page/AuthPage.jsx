@@ -12,9 +12,6 @@ const AuthPage = () => {
   const onFormSubmit = async (evt) => {
     evt.preventDefault();
 
-    // emilys
-    // emilyspass
-
     const fetchUserToken = async (username, password) => {
       const loginResponse = await fetch("https://dummyjson.com/auth/login", {
         method: "POST",
@@ -29,7 +26,7 @@ const AuthPage = () => {
       });
 
       if (!loginResponse.ok) {
-        throw new Error("Failed to log in");
+        throw new Error("Данного пользователя нет в системе!");
       }
 
       return (await loginResponse.json()).accessToken
@@ -45,30 +42,32 @@ const AuthPage = () => {
   };
 
   return (
-    <form onSubmit={onFormSubmit} style={{ maxWidth: "400px", margin: "0 auto" }}>
+    <form onSubmit={onFormSubmit} style={{ width: "30vw" }}>
       <div style={{ marginBottom: "16px" }}>
         <label htmlFor="username" style={{ display: "block", marginBottom: "8px" }}>
-          Enter your username:
+          Логин:
         </label>
         <input
           id="username"
           type="username"
           value={username}
           onChange={(ev) => setUsername(ev.target.value)}
-          style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+          style={{ width: "100%", padding: "8px", borderRadius: "10px" }}
+          placeholder="Введите логин"
         />
       </div>
 
       <div style={{ marginBottom: "16px" }}>
         <label htmlFor="password" style={{ display: "block", marginBottom: "8px" }}>
-          Enter your password:
+          Пароль:
         </label>
         <input
           id="password"
           type="password"
           value={password}
           onChange={(ev) => setPassword(ev.target.value)}
-          style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+          style={{ width: "100%", padding: "8px", borderRadius: "10px" }}
+          placeholder="Введите пароль"
         />
       </div>
 
@@ -78,9 +77,11 @@ const AuthPage = () => {
         </div>
       )}
 
-      <button type="submit" style={{ padding: "8px 16px", cursor: "pointer" }}>
-        Submit
-      </button>
+      <div style={{ display: "flex", width: "100%", justifyContent: "right" }}>
+        <button type="submit" style={{ backgroundColor: "white", border: "solid 2px black" }}>
+          Вход
+        </button>
+      </div>
     </form>
   );
 };

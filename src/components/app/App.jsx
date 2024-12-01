@@ -1,26 +1,30 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Theme, presetGpnDefault } from '@consta/uikit/Theme';
 
-import { BrowserRouter, Routes, Route, Router } from 'react-router-dom';
-import { Attachment } from '@consta/uikit/Attachment';
-import { Avatar } from '@consta/uikit/Avatar';
-import { Button } from '@consta/uikit/Button';
-import { IconBackward } from '@consta/icons/IconBackward';
-import { Card } from '@consta/uikit/Card';
-import MainPage from '../../pages/main-page/MainPage';
-import ServicePage from '../../pages/service-page/ServicePage';
-import ServiceDetailPage from '../../pages/servie-detail-page/ServiceDetailPage';
-import { Responses404 } from '@consta/uikit/Responses404';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainLayout from '../../layouts/main-layout/MainLayout';
 import { AppRoute } from '../../../const';
-import AuthPage from '../../pages/auth-page/AuthPage';
-import ProfilePage from '../../pages/profile-page/ProfilePage';
+import { Loader } from '@consta/uikit/Loader';
+import { Responses404 } from '@consta/uikit/Responses404';
 
+
+const MainPage = React.lazy(() => import('../../pages/main-page/MainPage'));
+const ServicePage = React.lazy(() => import('../../pages/service-page/ServicePage'));
+const AuthPage = React.lazy(() => import('../../pages/auth-page/AuthPage'));
+const ProfilePage = React.lazy(() => import('../../pages/profile-page/ProfilePage'));
+const ServiceDetailPage = React.lazy(() => import('../../pages/servie-detail-page/ServiceDetailPage'));
 
 const App = function() {
   return (
+   
     <Theme preset={presetGpnDefault}>
       <BrowserRouter>
+        <Suspense fallback={
+            <div style={{width:"100vw", display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+              <Loader size="m" />
+            </div>
+          }
+        >
         <Routes>
           <Route path={AppRoute.main} element={<MainLayout />}>
             <Route index element={<MainPage />}/>
@@ -29,9 +33,13 @@ const App = function() {
             <Route path={AppRoute.profile} element={<ProfilePage />}/>
             <Route path='/service/:id' element={<ServiceDetailPage />}/>
           </Route>
-          <Route path='*' element={<Responses404 />}/>
-        </Routes>
+          <Route path='*' element={
+            <div style={{width:"100vw", display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+              <Responses404 />
+            </div>}/>
+        </Routes></Suspense>
       </BrowserRouter>
+      
       {/* <Attachment
         withPictogram
         fileName="Файл"
