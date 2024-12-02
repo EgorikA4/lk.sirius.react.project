@@ -6,6 +6,7 @@ import MainLayout from '../../layouts/main-layout/MainLayout';
 import { AppRoute } from '../../../const';
 import { Loader } from '@consta/uikit/Loader';
 import { Responses404 } from '@consta/uikit/Responses404';
+import { Button } from '@consta/uikit/Button';
 
 
 const MainPage = React.lazy(() => import('../../pages/main-page/MainPage'));
@@ -35,7 +36,9 @@ const App = function() {
           </Route>
           <Route path='*' element={
             <div style={{width:"100vw", display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-              <Responses404 />
+              <Responses404 actions={
+                <Button label="Вернуться назад" onClick={() => window.history.back()}/>
+              }/>
             </div>}/>
         </Routes></Suspense>
       </BrowserRouter>

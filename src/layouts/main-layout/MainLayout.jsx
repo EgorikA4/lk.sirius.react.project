@@ -10,9 +10,11 @@ const MainLayout = () => {
         <Layout className={style.MainLayout}>
             <Header />
             <hr className={style.line}/>
-            <main className={style.main}>
-                <Outlet />
-            </main>
+            <Layout direction='column' flex={1}>
+                <main className={style.main}>
+                    <Outlet />
+                </main>
+            </Layout>
             <hr className={style.line}/>
             <Footer />
         </Layout>

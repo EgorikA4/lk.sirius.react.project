@@ -6,6 +6,7 @@ import { Grid, GridItem } from '@consta/uikit/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { setServices } from '../../store/store';
 import { getToken } from '../../services/token';
+import { ServicesAPI } from '../../../const';
 
 
 const ServicePage = () => {
@@ -21,18 +22,17 @@ const ServicePage = () => {
       return;
     }
 
-    fetch('https://673423afa042ab85d1190055.mockapi.io/api/v1/services', { method: 'GET' })
+    fetch(ServicesAPI, { method: 'GET' })
       .then((response) => response.json())
       .then((data) => dispatch(setServices(data)))
       .catch((error) => console.error('Error fetching services:', error));
   }, []);
 
-  console.log(services)
   return (
     <Grid gap="xl" cols={3}>
       {services.map((service) => (
-        <GridItem>
-        <Card verticalSpace="xs" horizontalSpace="xs" key={service.id} style={{display: "flex", alignItems:"center", gap:"2rem"}}>
+        <GridItem  key={`service/${service.id}`}>
+        <Card verticalSpace="xs" horizontalSpace="xs" style={{display: "flex", alignItems:"center", gap:"2rem"}}>
           <img src={service.image} width={"200px"} style={{borderRadius:"15px"}}/>
           <div>
           <Text weight="bold">{service.name}</Text>

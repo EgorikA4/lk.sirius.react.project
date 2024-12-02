@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { Grid } from "@consta/uikit/Grid";
 import { useDispatch, useSelector } from "react-redux";
 import { setNews } from "../../store/store";
+import { MainNewsAPI } from "../../../const";
 
 
 const MainPage = () => {
@@ -11,7 +12,7 @@ const MainPage = () => {
   const mainNews = useSelector((state) => state.mainNews)
 
   useEffect(() => {
-    fetch('https://673423afa042ab85d1190055.mockapi.io/api/v1/main', { method: 'GET' })
+    fetch(MainNewsAPI, { method: 'GET' })
       .then((response) => response.json())
       .then((data) => dispatch(setNews(data)))
       .catch((error) => console.error('Error fetching news:', error));

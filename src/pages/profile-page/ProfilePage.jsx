@@ -4,6 +4,7 @@ import { getToken } from "../../services/token";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from "../../store/store";
+import { UserDataAPI } from "../../../const";
 
 
 const ProfilePage = () => {
@@ -21,7 +22,7 @@ const ProfilePage = () => {
 
     const fetchUserInfo = async () => {
       try {
-        const response = await fetch("https://dummyjson.com/auth/me", {
+        const response = await fetch(UserDataAPI, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -36,8 +37,6 @@ const ProfilePage = () => {
         dispatch(setUser(userInfo));
       } catch (err) {
         setError(err.message || "An error occurred while fetching user info");
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -52,10 +51,10 @@ const ProfilePage = () => {
         </Text>
         <Text view="secondary">{user?.email}</Text>
         <Text view="secondary" style={{ marginTop: "8px" }}>
-          Username: {user?.username}
+          Логин: {user?.username}
         </Text>
-        <Text view="secondary">Phone: {user?.phone}</Text>
-        <Text view="secondary">Age: {user?.age}</Text>
+        <Text view="secondary">Телефон: {user?.phone}</Text>
+        <Text view="secondary">Возраст: {user?.age}</Text>
       </div>
       <img
         src={user?.image}

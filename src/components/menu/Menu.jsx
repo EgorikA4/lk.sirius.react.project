@@ -1,6 +1,7 @@
 import { Button } from "@consta/uikit/Button";
 import { NavLink, useLocation } from "react-router-dom";
 import style from "./Menu.module.css"
+import { getToken } from "../../services/token";
 
 
 
@@ -11,9 +12,9 @@ const Menu = () => {
             <NavLink to='/' >
                 <Button view={pathname==="/" ? "primary" : "secondary"} label='Главная страница'></Button>
             </NavLink>
-            <NavLink to='/service' activeClassName={style.active}>
+            {getToken() ? <NavLink to='/service' activeclassname={style.active}>
                 <Button view={pathname==="/service" ? "primary" : "secondary"}  label='Страница услуг'></Button>
-            </NavLink>
+            </NavLink> : ''}
         </div>
     );
 }
