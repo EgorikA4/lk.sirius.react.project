@@ -5,14 +5,18 @@ import Menu from '../menu/Menu';
 import React from 'react';
 import style from "./Header.module.css";
 import { getToken, dropToken } from "../../services/token";
-import { useSelector } from 'react-redux';
+import { jwtDecode } from 'jwt-decode'
 
 
 const Header = () => {
     const {pathname} = useLocation()
     const navigate = useNavigate();
-    const user = useSelector((state) => state.user)
     const token = getToken();
+    let user = undefined;
+
+    if(token !== ''){
+        user = jwtDecode(token)
+    }
 
     const handleLogout = () => {
         dropToken();
